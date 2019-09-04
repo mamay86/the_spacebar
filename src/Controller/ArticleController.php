@@ -42,7 +42,7 @@ class ArticleController extends AbstractController
     /**
      * @Route("/news/{slug}/heart", name="article_toggle_heart", methods={"POST"})
      */
-    public function toggleArticleHeart($slug, LoggerInterface $logger)
+    public function toggleArticleHeart($slug, LoggerInterface $logger): Response
     {
         // TODO - actually heart/unheart the article!
 
