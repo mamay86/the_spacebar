@@ -65,10 +65,12 @@ adipisicing cow cillum tenderloin.
 EOF;
 
         $item = $cache->getItem('markdown_'.md5($articleContent));
+
         if (!$item->isHit()) {
             $item->set($markdown->transform($articleContent));
             $cache->save($item);
         }
+
         $articleContent = $item->get();
 
         return $this->render('article/show.html.twig', [
