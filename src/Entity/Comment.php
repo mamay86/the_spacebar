@@ -12,7 +12,6 @@ class Comment
 {
     use TimestampableEntity;
 
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
