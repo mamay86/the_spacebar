@@ -15,11 +15,13 @@ class ArticleFixtures extends BaseFixture implements DependentFixtureInterface
         'Life on Planet Mercury: Tan, Relaxing and Fabulous',
         'Light Speed Travel: Fountain of Youth or Fallacy',
     ];
+
     private static $articleImages = [
         'asteroid.jpeg',
         'mercury.jpeg',
         'lightspeed.png',
     ];
+
     private static $articleAuthors = [
         'Mike Ferengi',
         'Amy Oort',
@@ -27,7 +29,8 @@ class ArticleFixtures extends BaseFixture implements DependentFixtureInterface
 
     protected function loadData(ObjectManager $manager)
     {
-        $this->createMany(Article::class, 10, function (Article $article, $count) use ($manager) {
+        $this->createMany(10, 'main_articles', function($count) use ($manager) {
+            $article = new Article();
             $article->setTitle($this->faker->randomElement(self::$articleTitles))
                 ->setContent(<<<EOF
 Spicy **jalapeno bacon** ipsum dolor amet veniam shank in dolore. Ham hock nisi landjaeger cow,
@@ -46,35 +49,27 @@ mollit quis officia meatloaf tri-tip swine. Cow ut reprehenderit, buffalo incidi
 strip steak pork belly aliquip capicola officia. Labore deserunt esse chicken lorem shoulder tail consectetur
 cow est ribeye adipisicing. Pig hamburger pork belly enim. Do porchetta minim capicola irure pancetta chuck
 fugiat.
-
-Sausage tenderloin officia jerky nostrud. Laborum elit pastrami non, pig kevin buffalo minim ex quis. Pork belly
-pork chop officia anim. Irure tempor leberkas kevin adipisicing cupidatat qui buffalo ham aliqua pork belly
-exercitation eiusmod. Exercitation incididunt rump laborum, t-bone short ribs buffalo ut shankle pork chop
-bresaola shoulder burgdoggen fugiat. Adipisicing nostrud chicken consequat beef ribs, quis filet mignon do.
-Prosciutto capicola mollit shankle aliquip do dolore hamburger brisket turducken eu.
-
-Do mollit deserunt prosciutto laborum. Duis sint tongue quis nisi. Capicola qui beef ribs dolore pariatur.
-Minim strip steak fugiat nisi est, meatloaf pig aute. Swine rump turducken nulla sausage. Reprehenderit pork
-belly tongue alcatra, shoulder excepteur in beef bresaola duis ham bacon eiusmod. Doner drumstick short loin,
-adipisicing cow cillum tenderloin.
 EOF
-                );
+            );
 
-            //publish most article
+            // publish most articles
             if ($this->faker->boolean(70)) {
                 $article->setPublishedAt($this->faker->dateTimeBetween('-100 days', '-1 days'));
             }
 
             $article->setAuthor($this->faker->randomElement(self::$articleAuthors))
                 ->setHeartCount($this->faker->numberBetween(5, 100))
-                ->setImageFilename($this->faker->randomElement(self::$articleImages));
+                ->setImageFilename($this->faker->randomElement(self::$articleImages))
+            ;
 
-            /** @var Tag[] $tags */
-            $tags = $this->getRandomReferences(Tag::class, $this->faker->numberBetween(0, 5));
+            $tags = $this->getRandomReferences('main_tags', $this->faker->numberBetween(0, 5));
             foreach ($tags as $tag) {
                 $article->addTag($tag);
             }
+
+            return $article;
         });
+
         $manager->flush();
     }
 
