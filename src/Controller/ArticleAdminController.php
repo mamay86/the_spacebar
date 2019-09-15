@@ -12,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Form\ArticleFormClass;
+use App\Form\ArticleFormType;
 
 class ArticleAdminController extends AbstractController
 {
@@ -22,7 +22,7 @@ class ArticleAdminController extends AbstractController
      */
     public function new(EntityManagerInterface $em, Request $request)
     {
-        $form = $this->createForm(ArticleFormClass::class);
+        $form = $this->createForm(ArticleFormType::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
